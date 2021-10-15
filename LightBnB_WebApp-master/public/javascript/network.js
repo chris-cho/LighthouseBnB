@@ -52,3 +52,21 @@ const submitProperty = function(data) {
     data,
   });
 }
+
+function getAllListings(params) {
+  let url = "/api/properties";
+  if (params) {
+    url += "?" + params;
+  }
+  return $.ajax({
+    url,
+  });
+}
+
+const submitReservation = function(data) {
+  return $.ajax({
+    method: "POST",
+    url: "/api/reservations",
+    data,
+  })
+}

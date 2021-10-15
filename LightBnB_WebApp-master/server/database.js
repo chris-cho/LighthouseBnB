@@ -78,9 +78,9 @@ exports.addUser = addUser;
  */
 const getAllReservations = function(guest_id, limit = 10) {
   return pool
-    .query(`SELECT properties.*, avg(property_reviews.rating) as average_rating FROM properties JOIN reservations ON reservations.property_id = properties.id JOIN property_reviews ON properties.id = property_reviews.property_id WHERE reservations.guest_id = $1 GROUP BY properties.id LIMIT $2`, [guest_id, limit])
+    .query(`SELECT reservations.id, properties.*, avg(property_reviews.rating) as average_rating, reservations.*  FROM properties JOIN reservations ON reservations.property_id = properties.id JOIN property_reviews ON properties.id = property_reviews.property_id WHERE reservations.guest_id = $1 GROUP BY reservations.id, properties.id ORDER BY reservations.start_date LIMIT $2`, [guest_id, limit])
     .then((result) => {
-      console.log(result.rows);
+      console.log(guest_id, limit);
       return Promise.resolve(result.rows);
     })
     .catch((err) => {
@@ -89,6 +89,23 @@ const getAllReservations = function(guest_id, limit = 10) {
     });
 };
 exports.getAllReservations = getAllReservations;
+
+const addReservation = function(reservation) {
+  /*
+   * Adds a reservation from a specific user to the database
+   */
+  return pool.query(`
+    INSERT INTO reservations (start_date, end_date, property_id, guest_id)
+    VALUES ($1, $2, $3, $4) RETURNING *;
+  `, [reservation.start_date, reservation.end_date, reservation.property_id, reservation.guest_id])
+  .then(res => res.rows[0])
+  .catch((err) => {
+    console.log(err.message);
+    return null;
+  });
+};
+
+exports.addReservation = addReservation;
 
 /// Properties
 
