@@ -43,7 +43,6 @@ $(() => {
         .catch(err => console.error(err));        
       })
       $('.add-review-button').on('click', function() {
-        console.log('on click');
         const idData = $(this).attr('id').substring(11);
         views_manager.show('newReview', idData);
       })

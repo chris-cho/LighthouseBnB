@@ -58,7 +58,6 @@ $(() => {
         $propertyReviews.appendTo($main);
         break;
       case 'newReview':
-        console.log('in review!');
         dataTag = `<h4>${data}</h4>`;
         $newReviewForm.appendTo($main);
         $(dataTag).appendTo("#datatag");

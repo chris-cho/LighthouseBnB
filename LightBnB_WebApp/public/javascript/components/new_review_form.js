@@ -17,7 +17,6 @@ $(() => {
   `)
 
   $newReviewForm.on('submit', function(event) {
-    console.log("click :O");
     event.preventDefault();
     const reviewBody = $('#new-review-body').val();
     const reviewRating = $('#new-review-rating').val();

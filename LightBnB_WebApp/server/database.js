@@ -21,7 +21,6 @@ const getUserWithEmail = function(email) {
   return pool
     .query(`SELECT id, name, password FROM users WHERE email = $1`, [email])
     .then((user) => {
-      console.log(user.rows[0]);
       return Promise.resolve(user.rows[0]);
     })
     .catch((err) => {
@@ -40,7 +39,6 @@ const getUserWithId = function(id) {
   return pool
     .query(`SELECT name, email FROM users WHERE id = $1`, [id])
     .then((user) => {
-      console.log(user.rows[0]);
       return Promise.resolve(user.rows[0]);
     })
     .catch((err) => {
@@ -60,7 +58,6 @@ const addUser =  function(user) {
   return pool
     .query(`INSERT INTO users (name,email,password) VALUES ($1, $2 ,$3)`, [user.name, user.email, user.password])
     .then((result) => {
-      console.log(result.rows);
       return Promise.resolve(result.rows);
     })
     .catch((err) => {
@@ -132,7 +129,6 @@ const getAllProperties = function(options, limit = 10) {
   // 3
   if (options.city) {
     queryParams.push(`%${options.city.slice(1)}%`);
-    console.log(options.city.slice(1));
     queryString += `WHERE city LIKE $${queryParams.length}`;
   }
 
@@ -171,10 +167,6 @@ const getAllProperties = function(options, limit = 10) {
   ORDER BY cost_per_night
   LIMIT $${queryParams.length};
   `;
-
-  // 5
-  console.log(queryString, queryParams);
-
   // 6
   return pool.query(queryString, queryParams).then((res) => res.rows);
 };
@@ -192,7 +184,6 @@ const addProperty = function(property) {
       `INSERT INTO properties (title, description, country, street, city, province, post_code, cost_per_night, parking_spaces, number_of_bathrooms, number_of_bedrooms, thumbnail_photo_url, cover_photo_url, owner_id)VALUES ($1, $2 ,$3 ,$4 ,$5 ,$6, $7, $8, $9, $10, $11, $12, $13, $14)RETURNING *;`, [property.title, property.description, property.country, property.street, property.city, property.province, property.post_code, property.cost_per_night, property.parking_spaces, property.number_of_bathrooms, property.number_of_bedrooms, property.thumbnail_photo_url, property.cover_photo_url, property.owner_id])
       
     .then((result) => {
-      console.log(result.rows);
       return Promise.resolve(result.rows);
     })
     .catch((err) => {
@@ -246,7 +237,6 @@ const updateReservation = function(reservationData) {
   }
   queryString += ` WHERE id = $${queryParams.length + 1} RETURNING *;`;
   queryParams.push(reservationData.reservation_id);
-  console.log(queryString);
   return pool.query(queryString, queryParams)
     .then(res => res.rows[0])
     .catch(err => console.error(err));

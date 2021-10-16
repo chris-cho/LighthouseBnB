@@ -1,5 +1,9 @@
 # LightBnB
 
+## Overview
+
+LightBnB is a mock BnB site. You will be able to sign up, log in, then either post your property or look for places to stay!
+
 ## Project Structure
 
 ```
@@ -41,3 +45,28 @@
   * `apiRoutes.js` and `userRoutes.js` are responsible for any HTTP requests to `/users/something` or `/api/something`. 
   * `json` is a directory that contains a bunch of dummy data in `.json` files.
   * `database.js` is responsible for all queries to the database. It doesn't currently connect to any database, all it does is return data from `.json` files.
+
+## Getting Started
+
+1. Fork this repository, then clone your fork of this repository.
+2. Install dependencies using the `npm install` command.
+3. Start the web server using the `npm run local` command. The app will be served at <http://localhost:3000/>.
+4. Go to <http://localhost:3000/> in your browser.
+
+## Dependencies
+
+- Express
+- Node 5.10.x or above
+- bCrypt
+- Body-Parser
+- Cookie-session
+- Nodemon
+- Postgresql (pg)
+- Sass
+
+
+## Final Product
+
+!["Landing Page"](https://github.com/chris-cho/LighthouseBnB/tree/main/docs/landing.png)
+!["Landing Page - Logged in"](https://github.com/chris-cho/LighthouseBnB/tree/main/docs/loggedin.png)
+!["Reservations"](https://github.com/chris-cho/LighthouseBnB/tree/main/docs/reservations.png)
