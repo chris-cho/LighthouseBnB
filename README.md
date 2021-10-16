@@ -69,6 +69,6 @@ LightBnB is a mock BnB site. You will be able to sign up, log in, then either po
 
 ## Final Product
 
-!["Landing Page"](https://github.com/chris-cho/LighthouseBnB/tree/main/docs/landing.png)
-!["Landing Page - Logged in"](https://github.com/chris-cho/LighthouseBnB/tree/main/docs/loggedin.png)
-!["Reservations"](https://github.com/chris-cho/LighthouseBnB/tree/main/docs/reservations.png)
+!["Landing Page"](https://github.com/chris-cho/LighthouseBnB/blob/main/docs/landing.png)
+!["Landing Page - Logged in"](hhttps://github.com/chris-cho/LighthouseBnB/blob/main/docs/loggedin.png)
+!["Reservations"](https://github.com/chris-cho/LighthouseBnB/blob/main/docs/reservations.png)
