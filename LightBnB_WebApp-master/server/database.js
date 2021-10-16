@@ -124,7 +124,7 @@ const getAllProperties = function(options, limit = 10) {
   const queryParams = [];
   // 2
   let queryString = `
-  SELECT properties.*, avg(property_reviews.rating) as average_rating
+  SELECT properties.*, avg(property_reviews.rating) as average_rating, count(property_reviews.rating) as review_count
   FROM properties
   JOIN property_reviews ON properties.id = property_id
   `;
@@ -133,15 +133,15 @@ const getAllProperties = function(options, limit = 10) {
   if (options.city) {
     queryParams.push(`%${options.city.slice(1)}%`);
     console.log(options.city.slice(1));
-    queryString += `WHERE city LIKE $${queryParams.length} `;
+    queryString += `WHERE city LIKE $${queryParams.length}`;
   }
 
   if (options.owner_id) {
     queryParams.push(`${options.owner_id}`);
     if (queryParams.length > 1) {
-      queryString += `AND owner_id = $${queryParams.length} `;
+      queryString += `AND owner_id = $${queryParams.length}`;
     } else {
-      queryString += `WHERE owner_id = $${queryParams.length} `;
+      queryString = `SELECT * FROM properties WHERE owner_id = $${queryParams.length}`;
     }
   }
 
@@ -149,18 +149,18 @@ const getAllProperties = function(options, limit = 10) {
     queryParams.push(`${options.minimum_price_per_night}`);
     queryParams.push(`${options.maximum_price_per_night}`);
     if (queryParams.length > 1) {
-      queryString += `AND cost_per_night BETWEEN $${queryParams.length - 1} AND $${queryParams.length} `;
+      queryString += `AND cost_per_night BETWEEN $${queryParams.length - 1} AND $${queryParams.length}`;
     } else {
-      queryString += `WHERE cost_per_night BETWEEN $${queryParams.length - 1} AND $${queryParams.length} `;
+      queryString += `WHERE cost_per_night BETWEEN $${queryParams.length - 1} AND $${queryParams.length}`;
     }
   }
 
   if (options.minimum_rating) {
     queryParams.push(`${options.minimum_rating}`);
     if (queryParams.length > 1) {
-      queryString += `AND rating >= $${queryParams.length} `;
+      queryString += `AND rating >= $${queryParams.length}`;
     } else {
-      queryString += `WHERE rating >= $${queryParams.length} `;
+      queryString += `WHERE rating >= $${queryParams.length}`;
     }
   }
 
@@ -273,3 +273,35 @@ const getIndividualReservation = function(reservationId) {
 };
 
 exports.getIndividualReservation = getIndividualReservation;
+
+/*
+ *  get reviews by property
+ */
+const getReviewsByProperty = function(propertyId) {
+  const queryString = `
+    SELECT property_reviews.id, property_reviews.rating AS review_rating, property_reviews.message AS review_text, 
+    users.name, properties.title AS property_title, reservations.start_date, reservations.end_date
+    FROM property_reviews
+    JOIN reservations ON reservations.id = property_reviews.reservation_id  
+    JOIN properties ON properties.id = property_reviews.property_id
+    JOIN users ON users.id = property_reviews.guest_id
+    WHERE properties.id = $1
+    ORDER BY reservations.start_date ASC;
+  `
+  const queryParams = [propertyId];
+  return pool.query(queryString, queryParams).then(res => res.rows)
+}
+
+exports.getReviewsByProperty = getReviewsByProperty;
+
+const addReview = function(review) {
+  const queryString = `
+    INSERT INTO property_reviews (guest_id, property_id, reservation_id, rating, message) 
+    VALUES ($1, $2, $3, $4, $5)
+    RETURNING *;
+  `;
+  const queryParams = [review.guest_id, review.property_id, review.id, parseInt(review.rating), review.message];
+  return pool.query(queryString, queryParams).then(res => res.rows);
+}
+
+exports.addReview = addReview;
