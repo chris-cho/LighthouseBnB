@@ -1,4 +1,5 @@
 $(() => {
+
   const $newReservationForm = $(`
   <form action="/api/reservations" method="post" id="new-reservation-form" class="new-reservation-form">
       <h3 id="new-reservation-header">Start Date</h3>
@@ -156,9 +157,12 @@ $(() => {
     </form>
   `);
 
+  window.$newReservationForm = $newReservationForm;
+
   $newReservationForm.on('submit', function (event) {
     event.preventDefault();
-    views_manager.show('none');
+
+    let errorMessage = "";
     const formArray = $(this).serializeArray();
 
     // check for presence of variables, if they're there, assign them
@@ -203,8 +207,8 @@ $(() => {
       }
     }
   
-    if ((startDate || endDate) && !errorMessage) {
-    const propertyId = $(this).find("#datatag h4").text();
+    if (errorMessage === "") {
+      const propertyId = $(this).find("#datatag h4").text();
       const dataObj = { start_date: startDate, end_date: endDate, property_id: propertyId }
       submitReservation(dataObj)
       .then(() => {
@@ -214,12 +218,15 @@ $(() => {
         console.error(error);
         views_manager.show('listings');
       })
+      return;
     }
+
+    window.alert(errorMessage);
+    errorMessage = "";
   });
+
   $('body').on('click', '#reservation-form__cancel', function() {
     views_manager.show('listings');
     return false;
   });
-  
-  window.$newReservationForm = $newReservationForm;
 });

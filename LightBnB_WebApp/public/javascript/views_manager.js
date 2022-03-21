@@ -20,12 +20,15 @@ $(() => {
     switch (item) {
       case 'listings':
         $propertyListings.appendTo($main);
+        console.log("listings")
         break;
       case 'newProperty':
         $newPropertyForm.appendTo($main);
+        console.log("newProperty")
         break;
       case 'searchProperty':
         $searchPropertyForm.appendTo($main);
+        console.log("searchProperty")
         break;
       case 'logIn':
         $logInForm.appendTo($main);
@@ -56,6 +59,7 @@ $(() => {
         getReviewsByProperty(data)
         .then(reviews => propertyReviews.addReviews(reviews))
         $propertyReviews.appendTo($main);
+        console.log("showReview")
         break;
       case 'newReview':
         dataTag = `<h4>${data}</h4>`;
