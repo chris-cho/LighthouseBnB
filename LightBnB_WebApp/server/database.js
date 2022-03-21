@@ -4,9 +4,8 @@ const { Pool } = require('pg');
 const { query } = require('express');
 
 const pool = new Pool({
-  user: 'chris',
-  password: '123',
-  host: 'localhost',
+  user: 'postgres',
+  password: 'postgres',
   database: 'lightbnb'
 });
 
