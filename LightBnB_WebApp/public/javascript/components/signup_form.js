@@ -31,6 +31,11 @@ $(() => {
     signUp(data)
       .then(getMyDetails)
       .then((json) => {
+        console.log(json);
+        if (!json.user) {
+          views_manager.show('error', 'Failed to signup');
+          return;
+        }
         header.update(json.user);
         views_manager.show('listings');
       });
